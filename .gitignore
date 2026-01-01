@@ -1,0 +1,69 @@
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+*~
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# =========================
+# C / C++ build artifacts
+# =========================
+*.o
+*.out
+*.elf
+*.map
+*.a
+*.so
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+
+# =========================
+# Logs & runtime output
+# =========================
+logs/
+*.log
+*.csv
+
+# =========================
+# Hardware / data captures
+# =========================
+data/
+captures/
+scans/
+
+# =========================
+# IDEs
+# =========================
+.vscode/
+.idea/
+*.code-workspace
+
+# =========================
+# Git / SSH safety
+# =========================
+*.pem
+*.key
+*.crt
+.env
+
+# =========================
+# Platform-specific
+# =========================
+__MACOSX/
