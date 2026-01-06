@@ -1,44 +1,51 @@
 import time
-from hardware.stepper_motor import StepperMotor
+from hardware.stepper_motor import StepperMotor, SAFE_MICROSTEP
 
 def test_stepper():
-    motor = StepperMotor()
+    print("\n=== REAL-LIFE STEPPER MOTOR TESTS ===")
 
-    print("Initial position:", motor.get_position())
+    print("\nTest 1: Invalid microstep fallback")
+    motor = StepperMotor(motor_steps_per_rev=200, microstep=5)  # invalid → fallback
+    print(f"Initial position: {motor.position}, microstep: {motor.microstep}")
+    if motor.microstep == SAFE_MICROSTEP:
+        print("[PASS] Microstep fallback worked")
+    else:
+        print("[FAIL] Microstep fallback did not work")
 
-    print("\nEnabling motor...")
+    print("\nTest 2: Enable motor")
     motor.enable()
-    print("Motor enabled:", motor.enabled)
+    print(f"Motor enabled: {motor.enabled}")
+    print("[PASS]" if motor.enabled else "[FAIL]")
 
-    print("\nStepping 10 steps clockwise...")
+    print("\nTest 3: Step forward 400 microsteps")
     motor.set_direction(clockwise=True)
-    motor.step(10, delay=0.1)
-    print("Position after 10 steps CW:", motor.get_position())
-
-    print("\nStepping 10 steps counter-clockwise...")
+    motor.step(400, delay=0.005)
+    print(f"Position after forward steps: {motor.position}")
+    expected_pos = 400 % motor.steps_per_rev
+    print("[PASS]" if motor.position == expected_pos else "[FAIL]")
+    
+    print("\nTest 4: Step backward 200 microsteps")
     motor.set_direction(clockwise=False)
-    motor.step(10, delay=0.1)
-    print("Position after 10 steps CCW:", motor.get_position())
+    motor.step(200, delay=0.005)
+    print(f"Position after backward steps: {motor.position}")
+    expected_pos = (expected_pos - 200) % motor.steps_per_rev
+    print("[PASS]" if motor.position == expected_pos else "[FAIL]")
 
-    print("\nMoving 10 steps using move() clockwise...")
-    motor.move(clockwise=True, steps=10, delay=0.1)
-    print("Position after move():", motor.get_position())
+    print("\nTest 5: Direction changes")
+    motor.set_direction(clockwise=True)
+    print(f"Direction set to clockwise: {motor.direction}")
+    motor.set_direction(clockwise=False)
+    print(f"Direction set to counter-clockwise: {motor.direction}")
+    print("[PASS]" if motor.direction == False else "[FAIL]")
 
-    print("\nMoving to absolute position 50...")
-    motor.go_to(50, delay=0.1)
-    print("Position after go_to(50):", motor.get_position())
-
-    print("\nMoving past full rotation (wrap around)...")
-    motor.go_to(250, delay=0.1)
-    print("Position after wrapping go_to(250):", motor.get_position())
-
-    print("\nDisabling motor...")
+    print("\nTest 6: Disable and cleanup")
     motor.disable()
-    print("Motor enabled:", motor.enabled)
-
-    print("\nCleaning up GPIO...")
+    print(f"Motor enabled after disable: {motor.enabled}")
     motor.cleanup()
-    print("Test complete.")
+    print("Cleanup done")
+    print("[PASS]" if not motor.enabled else "[FAIL]")
+
+    print("\n=== REAL-LIFE TESTS COMPLETE ===")
 
 if __name__ == "__main__":
     test_stepper()

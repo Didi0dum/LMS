@@ -1,24 +1,59 @@
 import RPi.GPIO as GPIO
-import time
+import time 
+from utils.logger import log
+
+SAFE_MICROSTEP = 1
 
 class StepperMotor:
-    def __init__(self, step_pin=24, dir_pin=25, sleep_pin=23, steps_per_rev=200, start_pos=0):
+    def __init__(
+        self,
+        step_pin=24,
+        dir_pin=25,
+        sleep_pin=23,
+        ms1_pin = 20,
+        ms2_pin = 21,
+        motor_steps_per_rev=200,
+        start_pos=0,
+        microstep=1
+    ):
         self.step_pin = step_pin
         self.dir_pin = dir_pin
         self.sleep_pin = sleep_pin
-        self.steps_per_rev = steps_per_rev
-        
+        self.ms1_pin = ms1_pin
+        self.ms2_pin = ms2_pin
+
+        self.motor_steps_per_rev = motor_steps_per_rev
+        self.microstep = microstep
+        self.steps_per_rev = motor_steps_per_rev
+
         self.position = start_pos
-        self.direction = None
+        self.direction = True
         self.enabled = False
-        
+
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.step_pin, GPIO.OUT)
         GPIO.setup(self.dir_pin, GPIO.OUT)
+        GPIO.setup(self.ms1_pin, GPIO.OUT)
+        GPIO.setup(self.ms2_pin, GPIO.OUT)
         GPIO.setup(self.sleep_pin, GPIO.OUT)
         
-        GPIO.output(self.sleep_pin, GPIO.HIGH)
-        
+        GPIO.output(self.sleep_pin, GPIO.LOW)
+        self.set_microstepping_state(microstep)
+    
+    def set_microstepping_state(self, state):
+        if state not in microstepping_states:
+            log(
+                "WARN",
+                "STEPPER",
+                f"Invalid microstep state: {state} → fallback to {SAFE_MICROSTEP}"
+            )
+            state = SAFE_MICROSTEP
+        ms1_val, ms2_val = microstepping_states[state]
+        GPIO.output(self.ms1_pin, ms1_val)
+        GPIO.output(self.ms2_pin, ms2_val)
+        self.steps_per_rev = self.motor_steps_per_rev * state
+        self.microstep = state
+
     def enable(self):
         GPIO.output(self.sleep_pin, GPIO.HIGH)
         self.enabled = True
@@ -26,7 +61,7 @@ class StepperMotor:
     def disable(self):
         GPIO.output(self.sleep_pin, GPIO.LOW)
         self.enabled = False
-    
+
     def set_direction(self, clockwise=True):
         GPIO.output(self.dir_pin, GPIO.HIGH if clockwise else GPIO.LOW)
         self.direction = clockwise
@@ -37,28 +72,22 @@ class StepperMotor:
             time.sleep(delay)
             GPIO.output(self.step_pin, GPIO.LOW)
             time.sleep(delay)
+
             if self.direction:
                 self.position = (self.position + 1) % self.steps_per_rev
             else:
                 self.position = (self.position - 1) % self.steps_per_rev
     
-    def move(self, clockwise, steps, delay=0.01):
-        self.enable()
-        self.set_direction(clockwise)
-        self.step(steps, delay)
-        self.disable()
-    
     def cleanup(self):
         GPIO.output(self.step_pin, GPIO.LOW)
         GPIO.output(self.sleep_pin, GPIO.LOW)
         GPIO.cleanup([self.step_pin, self.dir_pin])
-    
-    def get_position(self):
-        return self.position
 
-    def go_to(self, target_position, delay=0.01, disable_after=False):
-        steps_needed = target_position - self.position
-        direction = True if steps_needed >= 0 else False
-        self.move(direction, abs(steps_needed), delay)
-        if disable_after:
-            self.disable()
+
+microstepping_states = {
+    1: (0, 0),
+    2: (1, 0),
+    4: (0, 1),
+    8: (1, 1)
+}
+
