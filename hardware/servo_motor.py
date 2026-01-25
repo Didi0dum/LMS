@@ -1,11 +1,12 @@
 import pigpio
 import time
 
+
 class Servo:
     """
     Class for controlling a standard PWM servo using pigpio.
 
-    Attributes: 
+    Attributes:
         __pi: Connection to the pigpio daemon
         __pin: GPIO pin connected to the servo
         __min_us: Minimum PWM pulse width in microseconds
@@ -14,7 +15,14 @@ class Servo:
         __current_angle: Current angle of the servo
     """
 
-    def __init__(self, angle: float, pin: int = 18, min_us: float = 500, max_us: float = 2500, speed: int = 500) -> None:
+    def __init__(
+        self,
+        angle: float,
+        pin: int = 18,
+        min_us: float = 500,
+        max_us: float = 2500,
+        speed: int = 500,
+    ) -> None:
         """
         Initializes the servo object.
         Args:
@@ -26,7 +34,7 @@ class Servo:
         Raises:
             RuntimeError: If unable to connect to the pigpio daemon
         """
-        
+
         self.__pi = pigpio.pi()
         if not self.__pi.connected:
             raise RuntimeError("Could not connect to pigpio daemon")
@@ -53,7 +61,7 @@ class Servo:
             ValueError: If the angle is out of bounds
         """
         if angle < 0.0 or angle > 180.0:
-            raise ValueError("Angle out of bounds") 
+            raise ValueError("Angle out of bounds")
 
         # Linear mapping: 0° -> min_us, 180° -> max_us
         pwm = self.__min_us + (self.__max_us - self.__min_us) * (angle / 180)
@@ -76,7 +84,6 @@ class Servo:
             raise ValueError(f"Angle {angle} out of bounds (0–180°)")
         return angle
 
-
     def set_angle(self, angle: float, smooth: bool = True) -> None:
         """
         Moves the servo to a specific angle, waiting the required
@@ -87,7 +94,7 @@ class Servo:
         """
         angle = self.__clamp_angle(angle)
 
-        if smooth: 
+        if smooth:
             self.move_smooth(angle)
         else:
             # Convert angle to PWM signal
@@ -153,7 +160,6 @@ class Servo:
             time.sleep(delay)
 
         self.__current_angle = target
-
 
     def stop(self) -> None:
         """

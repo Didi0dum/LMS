@@ -2,6 +2,7 @@ import sys
 import time
 from hardware.servo_motor import Servo
 
+
 def test_servo():
     """
     Real-life hardware tests for Servo class.
@@ -64,7 +65,9 @@ def test_servo():
     servo.set_angle(60)  # 60° move
     elapsed = time.time() - start
 
-    print(f" → Movement time: {elapsed:.2f} s (expected ≈ {60/servo._Servo__speed:.2f} s)")
+    print(
+        f" → Movement time: {elapsed:.2f} s (expected ≈ {60/servo._Servo__speed:.2f} s)"
+    )
     print("✔ Timing test complete\n")
 
     # -------------------------------------------------
@@ -105,7 +108,7 @@ def test_servo():
         servo.set_angle(0)
         servo.set_angle(180)
     print("✔ Stability test complete\n")
-    
+
     # -------------------------------------------------
     # Test 8: Stop PWM output
     # -------------------------------------------------
@@ -122,7 +125,6 @@ def test_servo():
     print(" → Shaft should now move freely by hand")
     time.sleep(2)
     print("✔ Stop test complete\n")
-
 
     print("=== SERVO HARDWARE TEST END ===\n")
 

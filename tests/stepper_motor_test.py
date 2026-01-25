@@ -1,6 +1,7 @@
 import time
 from hardware.stepper_motor import StepperMotor, SAFE_MICROSTEP
 
+
 def test_stepper():
     print("\n=== REAL-LIFE STEPPER MOTOR TESTS ===")
 
@@ -23,7 +24,7 @@ def test_stepper():
     print(f"Position after forward steps: {motor.position}")
     expected_pos = 400 % motor.steps_per_rev
     print("[PASS]" if motor.position == expected_pos else "[FAIL]")
-    
+
     print("\nTest 4: Step backward 200 microsteps")
     motor.set_direction(clockwise=False)
     motor.step(700, delay=0.005)
@@ -46,6 +47,7 @@ def test_stepper():
     print("[PASS]" if not motor.enabled else "[FAIL]")
 
     print("\n=== REAL-LIFE TESTS COMPLETE ===")
+
 
 if __name__ == "__main__":
     test_stepper()

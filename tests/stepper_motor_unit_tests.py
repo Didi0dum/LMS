@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from hardware.stepper_motor import StepperMotor, SAFE_MICROSTEP
 
+
 class TestStepperMotor(unittest.TestCase):
     def setUp(self):
         # Print test name and description before each test
@@ -63,6 +64,7 @@ class TestStepperMotor(unittest.TestCase):
         mock_gpio.output.assert_any_call(motor.sleep_pin, mock_gpio.LOW)
         mock_gpio.cleanup.assert_called_once_with([motor.step_pin, motor.dir_pin])
 
+
 # Custom runner to print results in terminal clearly
 class VerboseTestResult(unittest.TextTestResult):
     def addSuccess(self, test):
@@ -76,6 +78,7 @@ class VerboseTestResult(unittest.TextTestResult):
     def addError(self, test, err):
         super().addError(test, err)
         print(f"[ERROR] {test._testMethodName}: {test._testMethodDoc}")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(resultclass=VerboseTestResult, verbosity=0)
