@@ -72,3 +72,14 @@ class LMSStation:
 
         self.azimuth = self.az_actuator.current_angle
         self.elevation = self.servo.get_angle()
+
+    def disable(self):
+        self.az_actuator.disable()
+        self.servo.stop()
+        self.lidar1.close()
+        self.lidar2.close()
+        log(
+            "INFO",
+            "STATION",
+            f"LMS Station disabled",
+        )

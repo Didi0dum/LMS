@@ -1,5 +1,6 @@
 import pigpio
 import time
+from utils.logger import log
 
 
 class Servo:
@@ -166,3 +167,8 @@ class Servo:
         Stops the servo by setting PWM width to 0 (turns off servo pulse).
         """
         self.__pi.set_servo_pulsewidth(self.__pin, 0)
+        log(
+            "INFO",
+            "SERVO",
+            f"Disabled motor",
+        )

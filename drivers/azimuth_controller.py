@@ -29,3 +29,7 @@ class AzimuthController:
     def move_to_angle(self, target_angle, delay):
         delta = target_angle - self.current_angle
         self.move_by_degree(delta, delay)
+
+    def disable(self):
+        self.motor.disable()
+        self.motor.cleanup()

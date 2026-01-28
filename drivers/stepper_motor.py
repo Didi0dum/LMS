@@ -26,7 +26,7 @@ class StepperMotor:
             sleep_pin (int): BCM pin for the SLEEP/ENABLE signal.
             ms1_pin (int): BCM pin for microstep selection bit 1.
             ms2_pin (int): BCM pin for microstep selection bit 2.
-            motor_steps_per_rev (int): Native steps of the motor (usually 200).
+            motor_steps_per_rev (int): Native steps of the motor.
             start_pos (int): Initial step count for tracking.
             microstep (int): Desired microstepping divisor (1, 2, 4, or 8).
         """
@@ -54,6 +54,12 @@ class StepperMotor:
 
         GPIO.output(self.sleep_pin, GPIO.LOW)
         self.set_microstepping_state(microstep)
+
+        log(
+            "INFO",
+            "STEPPER",
+            f"Stepper motor initialized",
+        )
 
     def set_microstepping_state(self, state):
         """
@@ -95,6 +101,11 @@ class StepperMotor:
         """
         GPIO.output(self.sleep_pin, GPIO.LOW)
         self.enabled = False
+        log(
+            "INFO",
+            "STEPPER",
+            f"Disabled motor",
+        )
 
     def set_direction(self, clockwise=True):
         """
@@ -136,6 +147,11 @@ class StepperMotor:
         GPIO.output(self.step_pin, GPIO.LOW)
         GPIO.output(self.sleep_pin, GPIO.LOW)
         GPIO.cleanup([self.step_pin, self.dir_pin])
+        log(
+            "INFO",
+            "STEPPER",
+            f"Pins cleaned up",
+        )
 
 
 microstepping_states = {1: (0, 0), 2: (1, 0), 4: (0, 1), 8: (1, 1)}
