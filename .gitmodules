@@ -1,3 +1,6 @@
 [submodule "lms-hardware"]
 	path = lms-hardware
 	url = https://github.com/rangelovkiril/lms-hardware
+[submodule "lms-controller"]
+	path = lms-controller
+	url = https://github.com/rangelovkiril/lms-controller
