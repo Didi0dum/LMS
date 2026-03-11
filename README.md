@@ -4,7 +4,7 @@
 
 [![License: GNU](https://img.shields.io/badge/License-GNU-blue.svg)](LICENSE)
 [![Hardware: Raspberry Pi](https://img.shields.io/badge/Hardware-Raspberry%20Pi%204-red.svg)](https://www.raspberrypi.org/)
-[![Built for: НОИТ 2026](https://img.shields.io/badge/Built%20for-НОИТ%202026-green.svg)]()
+[![Built for: НОИТ 2026](https://img.shields.io/badge/Built%20for-НОИТ%202026-green.svg)](https://edusoft.fmi.uni-sofia.bg/)
 
 ---
 
