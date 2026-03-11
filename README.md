@@ -94,31 +94,31 @@ When an LMS station detects unexpected orbital changes, it alerts the nearest pr
 ### System Overview
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    LMS Station (Hardware)                    │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│  │ LIDAR 1  │  │ LIDAR 2  │  │ LIDAR 3  │  │ LIDAR 4  │   │
-│  │(Elev top)│  │(Elev bot)│  │(Azim L)  │  │(Azim R)  │   │
-│  └─────┬────┘  └─────┬────┘  └─────┬────┘  └─────┬────┘   │
+│                    LMS Station (Hardware)                   │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐     │
+│  │ LIDAR 1  │  │ LIDAR 2  │  │ LIDAR 3  │  │ LIDAR 4  │     │
+│  │(Elev top)│  │(Elev bot)│  │(Azim L)  │  │(Azim R)  │     │
+│  └─────┬────┘  └─────┬────┘  └─────┬────┘  └─────┬────┘     │
 │        └──────────────┴──────────────┴──────────────┘       │
-│                          │                                   │
-│                   Raspberry Pi 4                             │
-│              (Tracking algorithms + MQTT)                    │
+│                          │                                  │
+│                   Raspberry Pi 4                            │
+│              (Tracking algorithms + MQTT)                   │
 └──────────────────────────┬──────────────────────────────────┘
                            │ MQTT/TLS
                            ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   Controller Platform                        │
-│  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐       │
-│  │   Mosquitto │─▶│    Elysia    │◀─│   InfluxDB   │       │
-│  │ MQTT Broker │  │   Backend    │  │  (TSDB)      │       │
-│  └─────────────┘  └──────┬───────┘  └──────────────┘       │
-│                           │ WebSocket                        │
-│                           ▼                                  │
-│                   ┌──────────────┐                           │
-│                   │   Next.js    │                           │
-│                   │   Frontend   │                           │
-│                   │ (3D Viz)     │                           │
-│                   └──────────────┘                           │
+│                   Controller Platform                       │
+│  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐        │
+│  │   Mosquitto │─▶│    Elysia    │◀─│   InfluxDB   │        │
+│  │ MQTT Broker │  │   Backend    │  │  (TSDB)      │        │
+│  └─────────────┘  └──────┬───────┘  └──────────────┘        │
+│                           │ WebSocket                       │
+│                           ▼                                 │
+│                   ┌──────────────┐                          │
+│                   │   Next.js    │                          │
+│                   │   Frontend   │                          │
+│                   │ (3D Viz)     │                          │
+│                   └──────────────┘                          │
 └─────────────────────────────────────────────────────────────┘
 ```
 
